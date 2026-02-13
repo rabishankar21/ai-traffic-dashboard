@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Traffic Admin Panel</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="navbar">
+    <h2>🚦 AI Traffic Admin Panel</h2>
+    <span class="badge">ACTIVE</span>
+</div>
+
+<div class="container">
+
+    <!-- LEFT -->
+    <div class="left">
+        <h2>Traffic Analyzer</h2>
+
+        <form method="POST" enctype="multipart/form-data">
+            <input type="file" name="file" required>
+            <button>Analyze</button>
+        </form>
+
+        {% if result %}
+        <div class="preview-card">
+        <h3>Result Preview</h3>
+        <img src="{{ url_for('static', filename=image) }}" class="preview-img">
+        </div>
+
+
+        <div class="result-text">
+            <p>Vehicles: {{ result.count }}</p>
+            <p>Congestion: {{ result.congestion }}</p>
+            <p>Signal Time: {{ result.time }} sec</p>
+        </div>
+
+        {% endif %}
+    </div>
+
+    <!-- RIGHT -->
+    <div class="right">
+        <h2>📊 Analytics</h2>
+
+        <div class="card">Uploads: {{ stats.total_uploads }}</div>
+        <div class="card">Vehicles: {{ stats.total_vehicles }}</div>
+        <div class="card red">High Congestion: {{ stats.high_congestion }}</div>
+        <div class="charts">
+        <canvas id="barChart"></canvas>
+<canvas id="lineChart"></canvas>
+<div class="pieChart">
+    <canvas id="pieChart"></canvas> </div>
+
+<canvas id="areaChart"></canvas>
+        </div></div>
+</div>
+        <!-- 🚦 SIGNAL CONTROL (BOTTOM) -->
+<div class="bottom-controls">
+
+    <hr>
+
+    <h3>🚦 Traffic Signal Controls</h3>
+
+    <div class="signals">
+        <button class="red-btn">🔴 Red</button>
+        <button class="yellow-btn">🟡 Yellow</button>
+        <button class="green-btn">🟢 Green</button>
+    </div>
+
+    <div class="settings">
+        <input type="number" placeholder="⏱ Set Timing (sec)">
+        <select>
+            <option>Road 1</option>
+            <option>Road 2</option>
+            <option>Road 3</option>
+            <option>Road 4</option>
+        </select>
+    </div>
+
+</div>
+
+
+<script>
+document.querySelectorAll('.signals button').forEach(btn => {
+    btn.onclick = () => alert(btn.innerText + " Activated");
+});
+</script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+window.onload = function() {
+
+const uploads = {{ stats.total_uploads | default(0) }};
+const vehicles = {{ stats.total_vehicles | default(0) }};
+const high = {{ stats.high_congestion | default(0) }};
+
+const labels = ['Uploads','Vehicles','High Congestion'];
+
+// COMMON AXIS STYLE
+const axisStyle = {
+    ticks: { color: "#e5e7eb" },
+    grid: { color: "rgba(255,255,255,0.08)" }
+};
+
+// ================= BAR CHART =================
+new Chart(document.getElementById("barChart"), {
+    type: 'bar',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: "Traffic Count",
+            data: [uploads, vehicles, high],
+            backgroundColor: ['#22c55e','#3b82f6','#ef4444']
+        }]
+    },
+    options: {
+        plugins: {
+            legend: { labels: { color: "white" } }
+        },
+        scales: {
+            x: {
+                ...axisStyle,
+                title: {
+                    display: true,
+                    text: "Traffic Categories (Uploads / Vehicles / High Congestion)",
+                    color: "#f9fafb",
+                    font: { size: 14, weight: 'bold' }
+                }
+            },
+            y: {
+                ...axisStyle,
+                title: {
+                    display: true,
+                    text: "Detected Count",
+                    color: "#f9fafb",
+                    font: { size: 14, weight: 'bold' }
+                }
+            }
+        }
+    }
+});
+
+// ================= LINE CHART =================
+new Chart(document.getElementById("lineChart"), {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: "Traffic Trend",
+            data: [uploads, vehicles, high],
+            borderColor: "#22c55e",
+            tension: 0.3
+        }]
+    },
+    options: {
+        plugins: { legend: { labels: { color: "white" } } },
+        scales: {
+            x: {
+                ...axisStyle,
+                title: {
+                    display: true,
+                    text: "Traffic Metrics Trend",
+                    color: "#f9fafb"
+                }
+            },
+            y: {
+                ...axisStyle,
+                title: {
+                    display: true,
+                    text: "Value Variation",
+                    color: "#f9fafb"
+                }
+            }
+        }
+    }
+});
+
+// ================= PIE CHART =================
+new Chart(document.getElementById("pieChart"), {
+    type: 'pie',
+    data: {
+        labels: labels,
+        datasets: [{
+            data: [uploads, vehicles, high],
+            backgroundColor: ['#22c55e','#3b82f6','#ef4444']
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        aspectRatio: 1,
+        plugins: {
+            legend: {
+                labels: {
+                    color: "white",
+                    font: { size: 13 }
+                }
+            }
+        }
+    }
+});
+
+// ================= AREA CHART =================
+new Chart(document.getElementById("areaChart"), {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: "Traffic Density",
+            data: [uploads, vehicles, high],
+            borderColor: "#22c55e",
+            backgroundColor: "rgba(34,197,94,0.25)",
+            fill: true,
+            tension: 0.3
+        }]
+    },
+    options: {
+        plugins: { legend: { labels: { color: "white" } } },
+        scales: {
+            x: {
+                ...axisStyle,
+                title: {
+                    display: true,
+                    text: "Traffic Metrics",
+                    color: "#f9fafb"
+                }
+            },
+            y: {
+                ...axisStyle,
+                title: {
+                    display: true,
+                    text: "Density Spread",
+                    color: "#f9fafb"
+                }
+            }
+        }
+    }
+});
+
+};
+</script>
+
+
+
+
+</body>
+</html>

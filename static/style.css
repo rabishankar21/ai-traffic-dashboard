@@ -1,0 +1,162 @@
+body {
+    margin: 0;
+    font-family: Arial;
+    background: #020617;
+    color: white;
+}
+
+.navbar {
+    padding: 15px 30px;
+    background: #020617;
+    border-bottom: 1px solid #1e293b;
+    display: flex;
+    justify-content: space-between;
+}
+
+.badge {
+    background: #22c55e;
+    padding: 10px 10px;
+    border-radius: 6px;
+}
+
+.container {
+    display: flex;
+    padding: 20px;
+    gap: 20px;
+}
+
+.left, .right {
+    flex: 1;
+}
+
+button {
+    background: #22c55e;
+    border: none;
+    padding: 8px 15px;
+    color: white;
+    border-radius: 6px;
+}
+
+.preview {
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 10px;
+}
+
+.card {
+    background: #1e293b;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 8px;
+}
+
+.red { border-left: 4px solid red; }
+
+@media(max-width: 900px) {
+    .container { flex-direction: column; }
+}
+.result-text {
+    background: #1e293b;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.result-text p {
+    font-size: 35px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+/* Image Card */
+.preview-card {
+    background: #1e293b;
+    padding: 15px;
+    border-radius: 12px;
+    margin-top: 15px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    text-align: center;
+}
+
+/* Smaller Image */
+.preview-img {
+    max-width: 400px;
+    width: 100%;
+    border-radius: 10px;
+}
+.charts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.charts canvas {
+    background: #1e293b;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+canvas {
+    width: 100% !important;
+    height: 250px !important;
+}
+.chart-box canvas {
+    width: 100% !important;
+    height: 280px !important;
+}
+
+#pieChart {
+     max-width: 350px;
+    max-height: 300px;
+    margin: auto;
+}
+
+/* buttons */
+.bottom-controls {
+    width: 95%;
+    margin-top: 40px;
+    margin-left: 20px;
+    background: #1e293b;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+/* Buttons row */
+.signals {
+    display: flex;
+    gap: 15px;
+    margin: 15px 0;
+}
+
+.signals button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    color: white;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+/* Colors */
+.red-btn { background: #ef4444; }
+.yellow-btn { background: #facc15; color: black; }
+.green-btn { background: #22c55e; }
+
+/* Inputs */
+.settings {
+    display: flex;
+    gap: 15px;
+}
+
+.settings input, .settings select {
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+}
+
+/* Mobile fix */
+@media(max-width:768px){
+    .signals, .settings{
+        flex-direction: column;
+    }
+}
